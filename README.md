@@ -16,5 +16,6 @@ Step 3: Press F5 or Run that file.
 Note: The first time it runs the analysis, it may take a few minutes.
 Re-runs are quickier, since it saves the last calculations.
 
-
+Please let me know if you run into a "missing file" problem.
+(Subfunction or data file.)
 
