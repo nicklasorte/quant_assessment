@@ -13,8 +13,8 @@ temp_delete_asn_tf=zeros(num_gmf,1);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Removed for loop and four lines after
-lf = cell2mat(cell_gmf_data(:,2) % matrix (num_gmf x 1) 
-hf = cell2mat(cell_gmf_data(:,3) % matrix (num_gmf x 1) 
+lf = cell2mat(cell_gmf_data(:,2)) % matrix (num_gmf x 1) 
+hf = cell2mat(cell_gmf_data(:,3)) % matrix (num_gmf x 1) 
 hf = max(lf,hf)% we need this to be max freq and not zero for next step
 % Only two situations exist where the gmf freq is not within a band of interest
 % if lf is larger than the max or if hf is lower than the min. 
