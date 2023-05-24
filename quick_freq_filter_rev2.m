@@ -10,52 +10,21 @@ max_freq_band=max(max(array_freq_bands));
 
 tic;
 temp_delete_asn_tf=zeros(num_gmf,1);
-for gmf_idx=1:1:num_gmf
-    %clc;
-    temp_gmf_freq1=cell_gmf_data{gmf_idx,2};
-    temp_gmf_freq2=cell_gmf_data{gmf_idx,3};
-
-    if temp_gmf_freq2==0 %%% Single frequency
-        %%%%if temp_gmf_freq1>=array_freq_bands(band_idx,1) && temp_gmf_freq1<=array_freq_bands(band_idx,2)
-        %%%%For frequencies that were right on the band edge, we were double counting them. Can only sit on the bottom edge?
-        %%%%%%%Might have to do this for the band assignments
-        if temp_gmf_freq1>=min_freq_band && temp_gmf_freq1<max_freq_band
-            temp_delete_asn_tf(gmf_idx)=0; %%%%%%Within Band
-        else
-            temp_delete_asn_tf(gmf_idx)=1; 
-        end
-    else %%%%Band Assingment
-        %%%'Band Assignment'
-        %%%%%Maybe check if the GMF Freq1==High Band Edge
-        if temp_gmf_freq1==max_freq_band
-            temp_delete_asn_tf(gmf_idx)=1;
-            %%%'Logic 0: GMF Freq 1 == High Band Edge'
-            %%%%Leave at Zero, no need to check anything else.
-        elseif temp_gmf_freq1<=min_freq_band && temp_gmf_freq2<=max_freq_band && temp_gmf_freq2>min_freq_band %%%%%%Straddles Lower Band1
-            %%%'Logic 1: Straddles Lower Band Bound'
-            temp_delete_asn_tf(gmf_idx)=0;
-        elseif temp_gmf_freq1<=max_freq_band && temp_gmf_freq2>=max_freq_band && temp_gmf_freq1>=min_freq_band %%%%%%Straddles High Band1
-            %%%'Logic 2: Straddles High Band Bound'
-            temp_delete_asn_tf(gmf_idx)=0;
-        elseif temp_gmf_freq1>=min_freq_band && temp_gmf_freq2<=max_freq_band  %%%%%%Sits Within Band1
-            %%%'Logic 3: Sits Within Band'
-            temp_delete_asn_tf(gmf_idx)=0;
-        elseif  temp_gmf_freq1<=min_freq_band && temp_gmf_freq2>=max_freq_band %%%%%%Overtop of entire band
-            %%%'Logic 4: Overtop Entire Band'
-            temp_delete_asn_tf(gmf_idx)=0;
-        else
-            temp_delete_asn_tf(gmf_idx)=1;
-        end
-    end
-% % %     temp_delete_asn_tf(gmf_idx)
-% % %     pause;
-
-end
-
-temp_del_idx=find(temp_delete_asn_tf==1);
-size(cell_gmf_data)
-cell_gmf_data(temp_del_idx,:)=[];
-size(cell_gmf_data)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Removed for loop and four lines after
+lf = cell2mat(cell_gmf_data(:,2)) % matrix (num_gmf x 1) 
+hf = cell2mat(cell_gmf_data(:,3)) % matrix (num_gmf x 1) 
+hf = max(lf,hf)% we need this to be max freq and not zero for next step
+% Only two situations exist where the gmf freq is not within a band of interest
+% if lf is larger than the max or if hf is lower than the min. 
+% Using this, we avoid having to write if/then for several scenarios like 
+% straddling lower and upper, sits within, overtop 
+cell_gmf_data(lf > max_freq_band | hf < min_freq_band,:)=[] 
+% very similar to how you did this with indexes
+% it picks all the rows where lf > max or hf < min and sets it to []
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 temp_array_freq=cell2mat(cell_gmf_data(:,[2:3]));
